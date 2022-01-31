@@ -43,7 +43,7 @@ using IntercallMonitor.Models;
                             if (message !=null)
                                 await _hub.Clients.All.SendAsync("ReceiveMessage",  message.callType,message.isRoom,message.roomNumber);
                            
-                            await _hub.Clients.All.SendAsync("ReceiveMessage", "CALL",true,10);
+                           // await _hub.Clients.All.SendAsync("ReceiveMessage", "CALL",true,10);
 
                         }
                         catch (Exception ex) {  Console.WriteLine(ex.Message); }
