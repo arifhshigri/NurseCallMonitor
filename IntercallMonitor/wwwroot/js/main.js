@@ -15,6 +15,7 @@ var MainView = Backbone.View.extend({
 	},
 	
 	trigger: function () {
+
 		
 	},
 	bootstrap_alert:function (elem,alert_type,bedNumber, timeout) {

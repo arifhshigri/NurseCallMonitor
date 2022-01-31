@@ -28,7 +28,6 @@ function bootstrap_alert (elem, alert_type, bedNumber, timeout) {
 	c = call_type_dict[alert_type]['color']
 	$(`#bed_${bedNumber}`).css({ "fill":c  });
 	console.log(`${alert_type} ${bedNumber}`);
-	debugger
 
 	var ele_alert = $(alert)
 	$(elem).append(ele_alert);
