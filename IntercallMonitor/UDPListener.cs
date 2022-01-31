@@ -42,6 +42,8 @@ using IntercallMonitor.Models;
                             var message = PacketHelper.GetMessage(new Packet(bytes));
                             if (message !=null)
                                 await _hub.Clients.All.SendAsync("ReceiveMessage",  message.callType,message.isRoom,message.roomNumber);
+                           
+                            await _hub.Clients.All.SendAsync("ReceiveMessage", "CALL",true,10);
 
                         }
                         catch (Exception ex) {  Console.WriteLine(ex.Message); }

@@ -21,7 +21,8 @@ namespace IntercallMonitor.Controllers
         public IActionResult Index()
         {
             var intObj = new Intercall.UDPListener(_hub);
-            intObj.StartListener("192.168.1.192", 6345);
+            string ip = "192.168.1.192";
+            intObj.StartListener("", 6345);
             return View();
         }
 
