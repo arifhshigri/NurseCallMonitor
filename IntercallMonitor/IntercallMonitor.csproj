@@ -8,7 +8,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
-  <ItemGroup>
+  <!-- <ItemGroup>
     <Content Remove="wwwroot\js\backbone.js" />
     <Content Remove="wwwroot\js\block.js" />
     <Content Remove="wwwroot\js\jquery-1.9.0.min.js" />
@@ -20,9 +20,9 @@
     <Content Remove="wwwroot\js\snap.svg.js" />
     <Content Remove="wwwroot\js\tree-face.js" />
     <Content Remove="wwwroot\js\underscore.js" />
-  </ItemGroup>
+  </ItemGroup> -->
 
-  <ItemGroup>
+  <!-- <ItemGroup>
     <None Include="wwwroot\js\backbone.js" />
     <None Include="wwwroot\js\block.js" />
     <None Include="wwwroot\js\jquery-1.9.0.min.js" />
@@ -34,7 +34,7 @@
     <None Include="wwwroot\js\snap.svg.js" />
     <None Include="wwwroot\js\tree-face.js" />
     <None Include="wwwroot\js\underscore.js" />
-  </ItemGroup>
+  </ItemGroup> -->
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="5.0.11" />
