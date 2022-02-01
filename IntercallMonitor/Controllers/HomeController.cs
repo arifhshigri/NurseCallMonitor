@@ -22,7 +22,7 @@ namespace IntercallMonitor.Controllers
         {
             var intObj = new Intercall.UDPListener(_hub);
             string ip = "192.168.1.192";
-            intObj.StartListener("", 6345);
+            intObj.StartListener(ip, 6345);
             return View();
         }
 
