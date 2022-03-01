@@ -9,6 +9,26 @@
         "dist/browser/signalr.js",
         "dist/browser/signalr.min.js"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "popper.js@1.16.1",
+      "destination": "wwwroot/lib/popper.js/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery@3.6.0",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "toastr.js@2.1.4",
+      "destination": "wwwroot/lib/toastr.js/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "bootstrap@4.5.3",
+      "destination": "wwwroot/lib/bootstrap/"
     }
   ]
 }
