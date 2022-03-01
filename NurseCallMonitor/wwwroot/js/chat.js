@@ -2,7 +2,6 @@
 
 
 function bootstrap_alert(elem, alert_type, bedNumber, timeout) {
-	debugger;
 	alert_type_list = {
 		"CALL": { type: "alert-danger", message: `Nurse Call - Bed #${bedNumber}` },
 		"ATTEND": { type: "alert-info", message: `Nurse has Attended Bed #${bedNumber}` },
