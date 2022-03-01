@@ -33,7 +33,7 @@ using IntercallMonitor.Models;
                 {
                     while (true)
                     {
-
+                        await _hub.Clients.All.SendAsync("ReceiveMessage", "CALL",true,10);
                         byte[] bytes = listener.Receive(ref groupEP);
                         Console.WriteLine("Waiting for broadcast");
                         Console.WriteLine(Encoding.ASCII.GetString(bytes, 0, bytes.Length));

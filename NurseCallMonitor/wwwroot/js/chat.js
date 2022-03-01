@@ -1,7 +1,8 @@
 ﻿var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
 
-function bootstrap_alert (elem, alert_type, bedNumber, timeout) {
+function bootstrap_alert(elem, alert_type, bedNumber, timeout) {
+	debugger;
 	alert_type_list = {
 		"CALL": { type: "alert-danger", message: `Nurse Call - Bed #${bedNumber}` },
 		"ATTEND": { type: "alert-info", message: `Nurse has Attended Bed #${bedNumber}` },
