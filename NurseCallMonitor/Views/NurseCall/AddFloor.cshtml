@@ -1,0 +1,169 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_LayoutV2.cshtml";
+}
+    <main class="content">
+        <div class="container-fluid p-0">
+            <div class="row mb-2 mb-xl-3">
+                <div class="col-auto d-none d-sm-block">
+                    <input type="text" class="form-control" name="BedNumber" placeholder="Bed Number">
+                </div>
+                <div class="col-auto d-none d-sm-block">
+                    <button class="btn btn-success" id="btnSaveFloor">Save Changes</button>
+                </div>
+                <div class="col-auto ms-auto text-end mt-n1">
+                    <button class="btn btn-primary" id="btnAddRoom">Add Room</button>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Primary
+                        </button>
+                        <div class="dropdown-menu" style="">
+                            <a class="dropdown-item" href="#" id="showTextModal">Add Text</a>
+                            <a class="dropdown-item" href="#" id="addBoxBtn">Add Box  </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-xxl-12 d-flex">
+                    <div class="w-100">
+                        <div class="mr-3 mt-3 mb-3 ml-3  square-grid full-size floor" id="containment-wrapper">
+                            <button id="btnFullScreen" class="position-relative">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-maximize align-middle"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1 bed-rooms room-draggable closeable selectable" id="sample_bed_room" style="display:none">
+            <div class="bg-primary">
+                <div class="bed">
+                    @*<h2 style="text-align: center;">
+                        Bed 1
+                    </h2>*@
+                    <i class="fa fa-solid fa-bed fa-5x" style="text-align: center;"></i>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="room-label">
+                <h2><label>VIP ROOM 1</label></h2>
+                <input type="text" class="edit-input" />
+            </div>
+            <i class="cursor-pointer fa-solid fa-pen-to-square edit"></i>
+            <i class="cursor-pointer fas fa-trash close"></i>
+        </div>
+        <!-- BEGIN success modal -->
+        <div class="modal fade" id="exampleModalLong" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Add Floor Text</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3 row">
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Font Size  </label>
+                                <select class="form-control" id="selectFontSize" name="SelectFontSize">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Floor Text</label>
+                                <textarea class="form-control" id="FloorTextArea" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btnAddText">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="defaultModalSuccess" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Room</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body m-3">
+                        <form id="addRoomForm">
+                            <div class="mb-3 row">
+                                <label class="col-form-label col-sm-2 text-sm-end p-0">Room Text</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="RoomLabel" placeholder="Room Number">
+                                </div>
+                            </div>
+                            @*<div class="mb-3 row">
+                                <label class="col-form-label col-sm-2 text-sm-end p-0">Bed Text </label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="BedLabel" placeholder="Bed Text">
+                                </div>
+                            </div>*@
+                            <div class="mb-3 row">
+                                <label class="col-form-label col-sm-2 text-sm-end p-0">Bed Number</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="BedNumber" placeholder="Bed Number">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btnRoomSave">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Button trigger modal -->
+        <!-- Modal -->
+        <div class="modal fade" id="boxModal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Add Box</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3 row">
+                            <label class="col-form-label col-sm-4 text-sm-end p-0">Choose Box Color</label>
+                            <div class="col-sm-4">
+                                <input type="color" class="form-control" id="BoxColor" name="BoxColor">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="AddBox">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="saveFloorModal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Add Box</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3 row">
+                            <label class="col-form-label col-sm-2 text-sm-end p-0">Floor Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="floorName" name="FloorName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btnSubmitFloor">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>

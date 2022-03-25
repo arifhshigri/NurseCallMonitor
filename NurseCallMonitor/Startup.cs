@@ -32,7 +32,7 @@ namespace NurseCallMonitor
             services.AddControllersWithViews();
             if (env.IsDevelopment())
             {
-                //builder.AddRazorRuntimeCompilation(); 
+                builder.AddRazorRuntimeCompilation(); 
             }
         }
 

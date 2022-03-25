@@ -11,6 +11,7 @@
     <None Remove="popper.js" />
     <None Remove="bootstrap" />
     <None Remove="toastr" />
+    <None Remove="Views\NurseCall\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
@@ -19,5 +20,8 @@
     <PackageReference Include="bootstrap" Version="4.4.1" />
     <PackageReference Include="toastr" Version="2.1.1" />
     <PackageReference Include="popper.js" Version="1.16.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\NurseCall\" />
   </ItemGroup>
 </Project>

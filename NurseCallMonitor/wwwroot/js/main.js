@@ -43,7 +43,8 @@ var MainView = Backbone.View.extend({
 				'RESET': { color: '#fff' }
 			}
 			c = call_type_dict[alert_type]['color']
-			$(`#bed_${bedNumber}`).css({ "fill": c });
+		$(`#bed_${bedNumber}`).css({ "fill": c }); 
+		$(`#bed_${bedNumber}`).addClass("Call"); 
 			console.log(`${callType} ${roomNumber}`);
 
 			var ele_alert = $(alert)
