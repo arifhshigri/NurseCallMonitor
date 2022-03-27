@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="content-type" content="text/html;charset=UTF-8" /> 
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,58 +12,71 @@
     <link rel="shortcut icon" href="~/img/icons/icon-48x48.png" />
     <link rel="canonical" href="index.html" />
     <link rel="stylesheet" href="~/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/css/site.css">
     <title>
         Nurse Call Dashboard
     </title>
     <link href="~/fonts.googleapis.com/css274d5.css?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
     <style>
-        .bed-rooms {
+        .RoomCls {
             min-width: 170px !important;
             min-height: 110px !important;
             padding: 0px !important;
             display: inline-block;
+            z-index: 1000;
         }
-        .bed h2, h3 ,i{
+
+        .bed h2, h3, i {
             font-weight: bolder;
-            color:white;
+            color: white;
+            z-index: 1000;
         }
+
         .draggable-heading {
             display: inline-block;
             font-weight: bolder;
             text-align: center;
             color: white !important
         }
-        .draggable-heading >h2 {
-            color: white !important
-        }
+
+            .draggable-heading > h2 {
+                color: white !important
+            }
+
         .room-label {
             font-weight: bolder;
             text-align: center;
-            color: white !important
+            color: white !important;
+            z-index: 1000; 
+
         }
-        .floor{
-            padding:10px;
+
+        .floor {
+            padding: 10px;
         }
+
         body {
             text-align: center;
         }
+
         .bed {
             box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
             margin: 10px;
             text-align: center;
             min-width: 150px;
             float: left;
+            z-index: 1000;
         }
+
         #draggable {
             cursor: n-resize;
         }
+
         h3 {
             clear: left;
         }
+
         .square-grid {
-            @*background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAHlBMVEUAAABkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGSH0mEbAAAACnRSTlMAzDPDPPPYnGMw2CgMzQAAAChJREFUKM9jgAPOAgZMwGIwKkhXQSUY0BCCMxkEYUAsEM4cjI4fwYIAf2QMNbUsZjcAAAAASUVORK5CYII=');*@
-            @*background-size: 15px;*@
-            @*border: 1px solid #878282;*@
             border: 20px ridge #4b7aad;
             background: #121d2a;
             background-image: linear-gradient(#162332 1px, transparent 2px), linear-gradient(90deg, #162332 1px, transparent 1px);
@@ -71,25 +84,30 @@
             min-height: 557px;
             height: 100%;
         }
+
         .full-size {
         }
+
         .close {
             top: -5px;
             right: -10px;
             position: absolute;
         }
+
         .edit {
             top: -5px;
             right: 5px;
             position: absolute;
         }
+
         .floor-box {
             min-width: 100px;
             border: 2px ridge #4b7aad;
             min-height: 100px;
-            background:white;
-            position:relative
+            background: white;
+            position: relative;
         }
+
         div.full-screen {
             z-index: 9999;
             width: 100%;
@@ -99,9 +117,22 @@
             left: 0;
         }
 
-        .box_container,.text.container{
-            display:inline-block;
+        .text_container {
+            z-index: 10;
+        }
 
+        .box_container, .text.container {
+            display: inline-block;
+        }
+        .box-container {
+            z-index: 10;
+        }
+        .full-icon {
+            position: relative;
+            top: 0px;
+            color: white;
+            float: right;
+        }
         }
     </style>
     <!-- Choose your prefered color scheme -->
@@ -111,11 +142,7 @@
     <!-- Remove this after purchasing -->
     <link class="js-stylesheet" href="~/css/light.css" rel="stylesheet">
     <link class="js-stylesheet" href="~/css/jquery-ui.min.css" rel="stylesheet">
-    <style>
-        body {
-            opacity: 0;
-        }
-    </style>
+    @RenderSection("RenderPageStyles", required: false)
     <!-- END SETTINGS -->
     <script async src="~/www.googletagmanager.com/gtag/jse143?id=UA-120946860-10"></script>
     <script>window.dataLayer = window.dataLayer || [];
@@ -130,6 +157,10 @@
   data-sidebar-position: left (default), right
   data-sidebar-layout: default (default), compact
 -->
+@{
+    string fileName = DateTime.Now.ToShortDateString();
+}
+
 <body data-theme="colored" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
     <!-- Modal -->
     <div class="wrapper">
@@ -141,11 +172,18 @@
                             Nurse Call Monitor
                         </span>
                     </a>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="/Nursecall">
-                            <i class="align-middle" data-feather="user"></i> <span class="align-middle">B-Block</span>
-                        </a>
-                    </li>
+                    @if (ViewData["Floors"] != null)
+                    {
+                        @foreach (var floorName in ViewData["Floors"] as IList<string>)
+                        {
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="/Nursecall?floorName=@floorName">
+                                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">@floorName</span>
+                                </a>
+                            </li>
+                        }
+                    }
+
                 </ul>
                 <div class="sidebar-cta">
                     <div class="sidebar-cta-content">
@@ -166,13 +204,13 @@
                         <li class="nav-item">
                             <a class="nav-icon js-fullscreen d-none d-lg-block" href="#">
                                 <div class="position-relative">
-                                    <i class="align-middle" data-feather="maximize"></i>
+                                    <i class="align-middle main-f-icon" data-feather="maximize"></i>
                                 </div>
                             </a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-icon pe-md-0 dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                <img src="~/img/avatars/avatar.jpg" class="avatar img-fluid rounded" alt="Charles Hall" />
+                                <i class="fa fa-user fa-1x bg-info" aria-hidden="true"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="AddFloor"><i class="align-middle me-1" data-feather="user"></i> AddFloor</a>
@@ -182,11 +220,31 @@
                 </div>
             </nav>
             @RenderBody()
+            <div class="RoomCls room-draggable closeable selectable floor-object bg-primary" id="sample_bed_room" style="display:none">
+                <div  >
+                    <div class="bed">
+                        @*<h2 style="text-align: center;">
+                                Bed 1
+                            </h2>*@
+                        <i class="fa fa-solid fa-bed fa-5x" style="text-align: center;"></i>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="room-label">
+                    <h2>VIP ROOM 1</h2>
+                </div>
+                <i class="cursor-pointer fa-solid fa-pen-to-square edit"></i>
+                <i class="cursor-pointer fas fa-trash close"></i>
+            </div>
         </div>
     </div>
     <script src="~/js/app.js"></script>
     <script src="~/js/jquery-ui.js"></script>
     <script src="~/js/nursecall.js"></script>
+
+    <script src="~/js/main.js?@Html.Raw(@fileName)"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js?@Html.Raw(@fileName)"></script>
+    <script src="~/js/chat.js?@Html.Raw(@fileName)"></script>
     <script>document.addEventListener("DOMContentLoaded", function (event) {
             setTimeout(function () {
                 if (localStorage.getItem('popState') !== 'shown') {
@@ -205,6 +263,8 @@
                 }
             }, 15000);
         });</script>
+    @RenderSection("RenderPageScripts", required: false)
+
 </body>
 <!-- Mirrored from demo.adminkit.io/ by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 19 Mar 2022 12:07:39 GMT -->
 </html>

@@ -2,19 +2,85 @@
     ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/_LayoutV2.cshtml";
 }
+@section RenderPageStyles
+{
+    <style>
+
+        .close , .edit  {
+            display:none !important
+        }
+    </style>
+}
 <main class="content">
-<div class="container-fluid p-0">
-    <div class="row">
-        <div class="col-xl-12 col-xxl-12 d-flex">
-            <div class="w-100">
-                <div class="mr-3 mt-3 mb-3 ml-3  square-grid full-size floor" id="containment-wrapper">
-                        <button id="btnFullScreen" class="position-relative">
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-xl-12 col-xxl-12 d-flex">
+                <div class="w-100">
+                    <div class="mr-3 mt-3 mb-3 ml-3  square-grid full-size floor" id="containment-wrapper">
+                        @*<a class="nav-icon js-fullscreen d-none d-lg-block  full-icon" href="#">
+                            <div class="position-relative">
+                                <i class="align-middle" data-feather="maximize"></i>
+                            </div>
+                        </a>*@
+                        <a id="btnFullScreen" class="position-relative full-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-maximize align-middle"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
-                        </button>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
-</div>
+    </div>
+    <div>
+    </div>
 </main>
-      
+@section RenderPageScripts
+{
+    <script>
+
+        $(function () {
+               @if (ViewData["FloorData"] != null) {
+                <text>
+            floor = @Html.Raw(ViewData["FloorData"]);
+                 </text>
+                 }
+             $.each(floor || [], function (index, ele) {
+                 func_list = {
+                     "text": render_text,
+                     "room": render_room,
+                     "box": render_box
+                 }
+                 func = func_list[ele.objectType]
+                 if (func)
+                     func(ele);
+             })
+       
+
+        var IDLE_TIMEOUT = 10; //seconds
+        var _idleSecondsCounter = 0;
+
+        document.onkeypress = function () {
+            _idleSecondsCounter = 0;
+        };
+        document.onclick = function () {
+            _idleSecondsCounter = 0;
+        };
+        document.onmousemove = function () {
+            _idleSecondsCounter = 0;
+        };
+
+        window.setInterval(CheckIdleTime, 1000);
+
+        function CheckIdleTime() {
+            _idleSecondsCounter++;
+            var oPanel = document.getElementById("SecondsUntilExpire");
+            if (oPanel)
+                oPanel.innerHTML = (IDLE_TIMEOUT - _idleSecondsCounter) + "";
+            if (_idleSecondsCounter >= IDLE_TIMEOUT) {
+                $('.feather').trigger('click')
+
+            }
+        }
+        });
+
+    </script>
+} 

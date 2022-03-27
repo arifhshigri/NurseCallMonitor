@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NurseCallMonitor.Models;
 using SignalRChat.Hubs;
 
 namespace NurseCallMonitor
@@ -16,10 +17,14 @@ namespace NurseCallMonitor
     {
         public IWebHostEnvironment env { get; }
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        public Startup( IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            //Configuration = configuration;
             this.env = env;
+            var builder = new ConfigurationBuilder()
+           .SetBasePath(env.ContentRootPath)
+           .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -27,13 +32,15 @@ namespace NurseCallMonitor
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var builder = services.AddControllersWithViews();
+            var serv = services.AddControllersWithViews();
             services.AddSignalR();
             services.AddControllersWithViews();
             if (env.IsDevelopment())
             {
-                builder.AddRazorRuntimeCompilation(); 
+                serv.AddRazorRuntimeCompilation(); 
             }
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
