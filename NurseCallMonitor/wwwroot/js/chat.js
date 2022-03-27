@@ -36,18 +36,19 @@ function randomIntFromInterval(min, max) { // min and max included
 	return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-setInterval(function () {
-	call_type_dict = [
-		'CALL' ,
-		'ATTEND' ,
-		'PRESENT',
-		'RESET',
-		'CALL',
-		'CALL',
-]
+//setInterval(function () {
+//	call_type_dict = [
+//		'CALL' ,
+//		'ATTEND' ,
+//		'PRESENT',
+//		'RESET',
+//		'CALL',
+//		'CALL',
+//]
 
-	bootstrap_alert('', call_type_dict[randomIntFromInterval(1, 5)], randomIntFromInterval(1,9));
-}, 2000);
+//	bootstrap_alert('', call_type_dict[randomIntFromInterval(1, 5)], randomIntFromInterval(1,9));
+//}, 2000);
+
 connection.start().then(function () {
     console.log("connection start")
     console.log("connection start")
