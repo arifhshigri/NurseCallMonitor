@@ -133,7 +133,18 @@
             color: white;
             float: right;
         }
+
+
+        #containment-wrapper {
+            width: 100%;
+            position: relative;
         }
+
+        .floor-object {
+            position: absolute;
+        }
+
+
     </style>
     <!-- Choose your prefered color scheme -->
     <!-- <link href="css/light.css" rel="stylesheet"> -->
@@ -142,6 +153,7 @@
     <!-- Remove this after purchasing -->
     <link class="js-stylesheet" href="~/css/light.css" rel="stylesheet">
     <link class="js-stylesheet" href="~/css/jquery-ui.min.css" rel="stylesheet">
+
     @RenderSection("RenderPageStyles", required: false)
     <!-- END SETTINGS -->
     <script async src="~/www.googletagmanager.com/gtag/jse143?id=UA-120946860-10"></script>
@@ -167,7 +179,7 @@
         <nav id="sidebar" class="sidebar js-sidebar collapsed">
             <div class="sidebar-content js-simplebar">
                 <ul class="sidebar-nav">
-                    <a class="sidebar-brand" href="index-2.html">
+                    <a class="sidebar-brand" href="#">
                         <span class="sidebar-brand-text align-middle">
                             Nurse Call Monitor
                         </span>
@@ -177,7 +189,7 @@
                         @foreach (var floorName in ViewData["Floors"] as IList<string>)
                         {
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="/Nursecall?floorName=@floorName">
+                                <a class="sidebar-link" href="@Url.ActionLink($"Index", "Home",new  { floorName= floorName})">
                                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">@floorName</span>
                                 </a>
                             </li>
@@ -188,7 +200,7 @@
                 <div class="sidebar-cta">
                     <div class="sidebar-cta-content">
                         <div class="d-grid">
-                            <a href="~/NurseCall/AddFloor" class="btn btn-outline-primary">Add Floor</a>
+                            <a href="@Url.ActionLink($"AddFloor", "Home")" class="btn btn-outline-primary">Add Floor</a>
                         </div>
                     </div>
                 </div>
@@ -199,12 +211,13 @@
                 <a class="sidebar-toggle js-sidebar-toggle">
                     <i class="hamburger align-self-center"></i>
                 </a>
+
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav navbar-align">
                         <li class="nav-item">
                             <a class="nav-icon js-fullscreen d-none d-lg-block" href="#">
                                 <div class="position-relative">
-                                    <i class="align-middle main-f-icon" data-feather="maximize"></i>
+                                    <i class="align-middle" data-feather="maximize"></i>
                                 </div>
                             </a>
                         </li>
@@ -213,19 +226,50 @@
                                 <i class="fa fa-user fa-1x bg-info" aria-hidden="true"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="AddFloor"><i class="align-middle me-1" data-feather="user"></i> AddFloor</a>
+                                <a class="dropdown-item" href="@Url.ActionLink($"AddFloor", "Home",new { floorName= ViewData["FloorName"]}, protocol: "https")">
+                                    <i class="align-middle me-1" data-feather=" "></i> Edit Floor
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                @*<span class="dropdown-item" href="@Url.ActionLink($"DeleteFloor", "Home",new { floorName= ViewData["FloorName"]}, protocol: "https")">
+                                    <i class="align-middle me-1" data-feather=" minus-circle"></i> Delete Floor
+                                </span>*@
                             </div>
                         </li>
                     </ul>
                 </div>
             </nav>
+
+            @*<nav class="navbar navbar-expand navbar-light navbar-bg">
+            <a class="sidebar-toggle js-sidebar-toggle">
+                <i class="hamburger align-self-center"></i>
+            </a>
+            <div class="navbar-collapse collapse">
+                <ul class="navbar-nav navbar-align">
+                    <li class="nav-item">
+                        <a class="nav-icon js-fullscreen d-none d-lg-block" href="#">
+                            <div class="position-relative">
+                                <i class="align-middle main-f-icon" data-feather="maximize"></i>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-icon pe-md-0 dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fa fa-user fa-1x bg-info" aria-hidden="true"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>*@
             @RenderBody()
-            <div class="RoomCls room-draggable closeable selectable floor-object bg-primary" id="sample_bed_room" style="display:none">
-                <div  >
+            <div class="RoomCls   closeable selectable floor-object bg-primary" id="sample_bed_room" style="display:none">
+                <div>
                     <div class="bed">
                         @*<h2 style="text-align: center;">
-                                Bed 1
-                            </h2>*@
+                        Bed 1
+                    </h2>*@
                         <i class="fa fa-solid fa-bed fa-5x" style="text-align: center;"></i>
                     </div>
                     <div class="clearfix"></div>
@@ -239,8 +283,11 @@
         </div>
     </div>
     <script src="~/js/app.js"></script>
-    <script src="~/js/jquery-ui.js"></script>
+    @*<script src="~/js/jquery-ui.js"></script>*@
+    <script src="~/js/TweenMax.min.js"></script>
+    <script src="~/js/gsapDraggable.js"></script>
     <script src="~/js/nursecall.js"></script>
+    <script src="~/js/interactjs.js"></script>
 
     <script src="~/js/main.js?@Html.Raw(@fileName)"></script>
     <script src="~/js/signalr/dist/browser/signalr.js?@Html.Raw(@fileName)"></script>

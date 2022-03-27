@@ -6,6 +6,7 @@ var grid_y = 10;
 var snapThreshold = 5;
 var snapWhileResizing = true;
 (function ($) {
+
     $.fn.getStyleObject = function () {
         var dom = this.get(0);
         var style;
@@ -42,30 +43,30 @@ var snapWhileResizing = true;
             "FloorName": floorName,
             "FloorData": JSON.stringify(SaveFloor())
         }
-        console.log(data);
         $.ajax({
             type: 'POST',
-            url: 'status.ajax.php',
+            url: 'AddFloor',
             data: data,
             dataType: 'json',
             success: function (data) {
-                // your code from above
+                alert("Successfully Save.");
+                debugger
+                if (window.location.href.indexOf(`floorName=`) > -1)
+                 {
+                    window.location.href = window.location.href
+
+                }
+                else
+                {
+                    window.location.href = (`${window.location.href}?floorName=${floorName.trim()}.json`);
+                }
             },
             error: function (xhr, textStatus, error) {
-                console.log(xhr.statusText);
-                console.log(textStatus);
-                console.log(error);
+                alert("Unsuccessfully! please try again.")
             }
         });
 
-        $.post("AddFloor", data
-            ).done(function (msg) {
-            alert(":")
-        })
-            .fail(function (xhr, status, error) {
-                // error handlingddd
-                alert(":fff")
-            });
+      
     });
 
 })(jQuery);
@@ -89,20 +90,28 @@ $(function () {
     };
 });
 $(function () {
-  
+
+    /***/
+    $.each($(".floor-object") || [], function (index, ele) {
+        draggable_C($(ele).attr('id') , "#containment-wrapper")
+    })
+    for (var i = 12; i < 100; i += 12) {
+        $("#selectFontSize").append(`<option value='${i}px'>${i} px</option>`)
+    }
+      /****/
+
     $('#btnFullScreen').click(function (e) {
         $('div.full-size').toggleClass('full-screen');
     });
+   
+    //$(".floor-object").resizable({
+    //    //handles: 'e, w'
+    //});
 
-    for (var i = 12; i < 100; i+=12) {
-        $("#selectFontSize").append(`<option value='${i}px'>${i} px</option>`)
-    }
-    $(".room-draggable").resizable({
-        //handles: 'e, w'
-    });
     $(document).on('click', 'i.close', function (ev) {
         $(event.target).closest('div.closeable').remove();
     });
+
     $(document).on('click', 'i.edit', function (ev)
     {
         roomLabel = $(ev.target).closest('div.RoomCls').find('h2.room-label').text().trim()
@@ -117,13 +126,15 @@ $(function () {
         modalobj.find('.modal-title').data('BedId', bedNumber);
         modalobj.modal("show");
     });
-    draggable_C(".room-draggable", "#containment-wrapper")
+
+   
     $("#btn-show-add-room-form").click(function (e) {
         $('#defaultModalSuccess').modal({
             backdrop: 'static',
             keyboard: false
         })
     });
+
     $("#btnRoomSave").click(function (e) {
         ele = $("#sample_bed_room").clone();
         roomData = $('#addRoomForm').serializeObject();
@@ -172,9 +183,8 @@ $(function () {
     });
     $("#AddBox").on("click", function (event) {
         color = $("#BoxColor").val();
-        add_box_toFloor(color)
-        //$(".floor-box").draggable({ containment: "#containment-wrapper", scroll: false });
-        draggable_C(".floor-box", "#containment-wrapper")
+        ele_id= add_box_toFloor(color)
+        draggable_C(ele_id, "#containment-wrapper")
 
     });
     $(document).on("click", "#btnAddText", function(e){
@@ -188,31 +198,38 @@ $(function () {
 
 function add_bed_room_toFloor(ele, roomData, bedId, isresizeable = true, isdraggable = true) {
     id = (roomData['RoomLabel'] || "").replace(' ', '_');
-    $(ele).attr("id", normalize_bedId(id, true))
+    ele_id = normalize_bedId(id, true);
     $(ele).find('div.bed').attr("id", bedId);
     $(ele).find('.bed-label').text((roomData['BedLabel']))
     $(ele).find('.room-label').text((roomData['RoomLabel']))
     $(ele).css("display", '')
     $(ele).addClass("floor-object")
+    $(ele).attr("id", ele_id)
+
     //if (isresizeable)
     //    $(ele).resizable({
     //    //handles: 'e, w'
     //});
     $('#containment-wrapper').append(ele);
-    //$(".room-draggable").resizable({
+    //$(".floor-object").resizable({
     //    //handles: 'e, w'
     //});
-    //$(".room-draggable").draggable({ containment: , scroll: false });
-    //draggable_C(".room-draggable", "#containment-wrapper")
+    //$(".floor-object").draggable({ containment: , scroll: false });
+    //draggable_C(".floor-object", "#containment-wrapper")
 
     if (isdraggable)
-        draggable_C(ele, "#containment-wrapper")
+        draggable_C($(ele).attr('id'), "#containment-wrapper")
 }
 
 function add_box_toFloor(color) {
     ele = $('<div>').addClass("floor-box closeable box_container floor-object").append('<i class="cursor-pointer fas fa-trash close"></i>').css("background-color", color).attr("id", `Box_${parseInt(Math.random() * 1000000)}`)
+    ele_id = gen_Id('box');
+    $(ele).attr("id", ele_id)
+
     $('#containment-wrapper').append(ele);
-    $(".floor-box").resizable();
+    //$(".floor-box").resizable();
+
+    return ele_id
 }
 function add_text_toFloor(text, fontSize) {
     ele = $("<h2>")
@@ -220,9 +237,10 @@ function add_text_toFloor(text, fontSize) {
     div = $("<div>").append('<i class="cursor-pointer fas fa-trash close"></i>')
         .append(ele).addClass("text_container closeable draggable-heading floor-object")
     $('#containment-wrapper').append(div);
-    $(div).resizable();
-    //$(".draggable-heading").draggable({ containment: "#containment-wrapper" });
-    draggable_C(".draggable-heading", "#containment-wrapper")
+    //$(div).resizable();
+    ele_id = gen_Id('box');
+    $(div).attr("id", ele_id)
+    draggable_C(ele_id, "#containment-wrapper")
 
 }
 function SaveFloor() {
@@ -276,7 +294,6 @@ function add_dom_attr(element, attr) {
 
 function render_text(obj, isresizeable = false, isdraggable = false) {
     ele = $("<h2>")
-    
     $(ele).text((obj.text || "").trim());
     div = $("<div>").append('<i class="cursor-pointer fas fa-trash close"></i>')
         .append(ele).addClass("text_container closeable draggable-heading floor-object")
@@ -284,27 +301,42 @@ function render_text(obj, isresizeable = false, isdraggable = false) {
         add_dom_attr(div, obj.DOMAttributes);
     }
     $(div).find("h2").attr('style', obj.TextStyle);
+    //ele_id = gen_Id('box');
+    //$(ele).attr("id", ele_id)
+
     $('#containment-wrapper').append(div);
-    if (isresizeable)
-        $(div).resizable();
+    //if (isresizeable)
+        //$(div).resizable();
+
     //$(".draggable-heading").draggable({ containment: "#containment-wrapper" });
+
     if (isdraggable)
-        draggable_C(".draggable-heading", "#containment-wrapper")
+        draggable_C($(div).attr('id'), "#containment-wrapper")
 
 
+}
+function gen_Id(type) {
+    var flag = true
+    var id = '';
+    do
+    {
+        id = `${type}_${Math.random().toString(36)}`;
+        flag = !!document.getElementById(id);
+    } while (flag)
+    return id;
 }
 function render_box(obj, isresizeable = false,isdraggable=false) {
     ele = $('<div>').addClass("floor-box closeable box_container floor-object").append('<i class="cursor-pointer fas fa-trash close"></i>').css("background-color", obj.color).attr("id", `Box_${parseInt(Math.random() * 1000000)}`)
     if (obj.DOMAttributes) {
         add_dom_attr(ele, obj.DOMAttributes);
     }
-    if (isresizeable)
-        $(ele).resizable();
+    //if (isresizeable)
+    //    $(ele).resizable();
     //draggable_C(".floor-box", "#containment-wrapper")
-    if (isdraggable)
-        draggable_C(ele, "#containment-wrapper")
+  
     $('#containment-wrapper').append(ele);
-
+    if (isdraggable)
+        draggable_C($(ele).attr('id'), "#containment-wrapper")
 }
 
 function render_room(obj, isresizeable = false, isdraggable = false) {
@@ -316,17 +348,72 @@ function render_room(obj, isresizeable = false, isdraggable = false) {
     if (obj.DOMAttributes) {
         add_dom_attr(ele, obj.DOMAttributes);
     }
-     add_bed_room_toFloor(ele, roomData, obj.bed_id, isresizeable, isdraggable)
+    add_bed_room_toFloor(ele, roomData, obj.bed_id, isresizeable, isdraggable)
     }
-function draggable_C(element, containerId) {
-    old_w = $(containerId).width();
-    old_h = $(containerId).height();
-    $(element).draggable({
-        containment: containerId, scroll: true,
-        //snap: '.gridlines',
-        stop: function () {
-            $(this).css("left", parseInt($(this).css("left")) / ($(".square-grid").width() / 100) + "%");
-            $(this).css("top", parseInt($(this).css("top")) / ($(".square-grid").height() / 100) + "%")
-        }
-    });
+function draggable_C(elementId, containerId) {
+    //old_w = $(containerId).width();
+    //old_h = $(containerId).height();
+    ////$(element).draggable({
+    ////    containment: containerId, scroll: true,
+    ////    //snap: '.gridlines',
+    ////    stop: function () {
+    ////        $(this).css("left", parseInt($(this).css("left")) / ($(".square-grid").width() / 100) + "%");
+    ////        $(this).css("top", parseInt($(this).css("top")) / ($(".square-grid").height() / 100) + "%")
+    ////    }
+    ////});
+
+    var dragger = document.getElementById(elementId);
+    if (dragger) {
+        var draggable = Draggable.create(dragger, {
+            type: "left,top",
+            bounds: containerId,
+            onPress: function () {
+                dragger.style.left = dragger.offsetLeft + "px";
+                dragger.style.top = dragger.offsetTop + "px";
+                this.update(); //force the Draggable to update with the new values.
+            },
+            onDragEnd: function () {
+                dragger.style.left = (dragger.offsetLeft / dragger.parentNode.offsetWidth) * 100 + "%";
+                dragger.style.top = (dragger.offsetTop / dragger.parentNode.offsetHeight) * 100 + "%";
+            }
+        });
+    }
+
+    //const position = { x: 0, y: 0 }
+
+    //interact('.floor-object').draggable({
+    //    listeners: {
+    //        start(event) {
+    //            console.log(event.type, event.target)
+    //        },
+    //        move(event) {
+    //            position.x += event.dx
+    //            position.y += event.dy
+    //            event.target.style.transform =
+    //                `translate(${position.x}px, ${position.y}px)`
+    //        },
+    //    }
+    //})
+
+   
+}
+
+function resizeable(elementCls) {
+    interact('.floor-object')
+        .resizable({
+            edges: { top: true, left: true, bottom: true, right: true },
+            listeners: {
+                move: function (event) {
+                    let { x, y } = event.target.dataset
+                    x = (parseFloat(x) || 0) + event.deltaRect.left
+                    y = (parseFloat(y) || 0) + event.deltaRect.top
+                    Object.assign(event.target.style, {
+                        width: `${event.rect.width}px`,
+                        height: `${event.rect.height}px`,
+                        transform: `translate(${x}px, ${y}px)`
+                    })
+                    Object.assign(event.target.dataset, { x, y })
+                }
+            }
+        })
 }

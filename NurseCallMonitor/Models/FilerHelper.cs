@@ -17,7 +17,7 @@ namespace NurseCallMonitor.Models
                 var files_names = new List<string>();
                 foreach (FileInfo file in Files)
                 {
-                    files_names.Add(file.Name);
+                    files_names.Add(file.Name.Replace(".json",""));
                 }
                 return files_names;
             }
@@ -46,8 +46,9 @@ namespace NurseCallMonitor.Models
         {
             try
             {
+                  
                 TextReader textReader;
-                using (textReader = new StreamReader($"{floorFilePath}/{floorName}", System.Text.Encoding.Default))
+                using (textReader = new StreamReader($"{floorFilePath}/{floorName}.json", System.Text.Encoding.Default))
                 {
                    string val= textReader.ReadToEnd( );
                    return val;

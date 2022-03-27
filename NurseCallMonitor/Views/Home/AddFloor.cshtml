@@ -1,12 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/_LayoutV2.cshtml";
+    var floorName = ViewData["FloorName"] != null ? ViewData["FloorName"].ToString() : "";
 }
+
 <main class="content">
     <div class="container-fluid p-0">
         <div class="row mb-2 mb-xl-3">
             <div class="col-auto d-none d-sm-block">
-                <input type="text" class="form-control" id="FloorName" name="FloorName" placeholder="Floor Name">
+                <input type="text" class="form-control" value="@floorName" id="FloorName" name="FloorName" placeholder="Floor Name">
             </div>
             <div class="col-auto d-none d-sm-block">
                 <button class="btn btn-success" id="btnSaveFloor">Save Changes</button>
@@ -156,11 +158,18 @@
     <script>
 
         $(function () {
-                   @if (ViewData["FloorData"] != null) {
-                    <text>
-            floor = @Html.Raw(ViewData["FloorData"]);
-                     </text>
-                     }
+                   @if (ViewData["FloorData"] != null && !string.IsNullOrEmpty(ViewData["FloorData"].ToString()))
+                   {
+                        <text>
+                            floor = @Html.Raw(ViewData["FloorData"]);
+                         </text>
+                }
+                else
+                {
+                        <text>
+            floor = [];
+                         </text>
+                }
             $.each(floor || [], function (index, ele) {
                 func_list = {
                     "text": render_text,
@@ -171,6 +180,10 @@
                 if (func)
                     func(ele, true, true);
             })
+
+            if (resizeable) {
+                resizeable()
+            }
         });
-        </script>
+    </script>
     }

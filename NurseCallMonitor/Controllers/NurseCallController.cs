@@ -12,11 +12,11 @@ using System.Linq;
 
 namespace IntercallMonitor.Controllers
 {
-    public class NurseCallController : Controller
+    public class HomeController : Controller
     {
         public IOptions<AppSettings> _settings { get; }
 
-        public NurseCallController(IOptions<AppSettings> settings)
+        public HomeController(IOptions<AppSettings> settings)
         {
             _settings = settings;
         }
@@ -32,6 +32,7 @@ namespace IntercallMonitor.Controllers
             var fileNames = FilerHelper.ReadFilenames(_settings.Value.FloorFilePath);
             ViewData["Floors"] = fileNames;
             floorName = fileNames.FirstOrDefault(x => x.Trim().ToLower() == floorName.Trim().ToLower());
+            ViewData["FloorName"] = floorName;
             ViewData["FloorData"] = FilerHelper.ReadFloor(_settings.Value.FloorFilePath, floorName);
         }
 
