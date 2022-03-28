@@ -40,11 +40,18 @@
     <script>
 
         $(function () {
-               @if (ViewData["FloorData"] != null) {
-                <text>
-            floor = @Html.Raw(ViewData["FloorData"]);
-                 </text>
-                 }
+                 @if (ViewData["FloorData"] != null && !string.IsNullOrEmpty(ViewData["FloorData"].ToString()))
+                   {
+                        <text>
+                            floor = @Html.Raw(ViewData["FloorData"]);
+                         </text>
+                }
+                else
+                {
+                        <text>
+            floor = [];
+                         </text>
+                }
              $.each(floor || [], function (index, ele) {
                  func_list = {
                      "text": render_text,
@@ -55,7 +62,7 @@
                  if (func)
                      func(ele);
              })
-       
+
 
         var IDLE_TIMEOUT = 10; //seconds
         var _idleSecondsCounter = 0;
