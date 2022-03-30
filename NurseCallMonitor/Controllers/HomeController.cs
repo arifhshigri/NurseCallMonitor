@@ -16,9 +16,11 @@ namespace IntercallMonitor.Controllers
     {
         public IOptions<AppSettings> _settings { get; }
 
-        public HomeController(IOptions<AppSettings> settings)
+        public HomeController(IOptions<AppSettings> settings, ILogger<HomeController> logger, IHubContext<ChatHub> hub)
         {
             _settings = settings;
+            var intObj = new UDPListener(hub);
+            intObj.StartListener("192.168.1.192", 6345);
         }
 
         public IActionResult Index(string floorName="")
