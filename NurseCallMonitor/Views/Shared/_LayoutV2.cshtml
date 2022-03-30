@@ -189,7 +189,7 @@
                         @foreach (var floorName in ViewData["Floors"] as IList<string>)
                         {
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="@Url.ActionLink($"Index", "Home",new  { floorName= floorName})">
+                                <a class="sidebar-link" href="@Url.ActionLink($"Index", "Home",new  { floorName= floorName},Request.Scheme)">
                                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">@floorName</span>
                                 </a>
                             </li>
@@ -200,7 +200,7 @@
                 <div class="sidebar-cta">
                     <div class="sidebar-cta-content">
                         <div class="d-grid">
-                            <a href="@Url.ActionLink($"AddFloor", "Home")" class="btn btn-outline-primary">Add Floor</a>
+                            <a href="@Url.ActionLink($"AddFloor", "Home",null,protocol:"http")" class="btn btn-outline-primary">Add Floor</a>
                         </div>
                     </div>
                 </div>
@@ -226,7 +226,7 @@
                                 <i class="fa fa-user fa-1x bg-info" aria-hidden="true"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="@Url.ActionLink($"AddFloor", "Home",new { floorName= ViewData["FloorName"]}, protocol: "https")">
+                                <a class="dropdown-item" href="@Url.ActionLink($"AddFloor", "Home",new { floorName= ViewData["FloorName"]}, protocol: "http")">
                                     <i class="align-middle me-1" data-feather=" "></i> Edit Floor
                                 </a>
                                 <div class="dropdown-divider"></div>
