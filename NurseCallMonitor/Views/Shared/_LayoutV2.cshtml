@@ -189,7 +189,7 @@
                         @foreach (var floorName in ViewData["Floors"] as IList<string>)
                         {
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="@Url.ActionLink($"Index", "Home",new  { floorName= floorName},Request.Scheme)">
+                                <a class="sidebar-link" href="@Url.ActionLink($"Index", "Home",new  { floorName= floorName},"http")">
                                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">@floorName</span>
                                 </a>
                             </li>
