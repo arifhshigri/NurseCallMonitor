@@ -6,11 +6,20 @@ namespace NurseCallMonitor.Models
 {
     public  static class FilerHelper
     {
+        public static void CreateIfNotExist(string path)
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), path);
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+        }
 
         public static List<string> ReadFilenames(string path)
         {
             try
             {
+                CreateIfNotExist(path);
                 DirectoryInfo d = new DirectoryInfo(path); //Assuming Test is your Folder
 
                 FileInfo[] Files = d.GetFiles("*.json"); //Getting Text files
@@ -30,6 +39,7 @@ namespace NurseCallMonitor.Models
         {
             try
             {
+                CreateIfNotExist(path);
                 TextWriter writer;
                 using (writer = new StreamWriter($"{path}/{filename}.json", append: false))
                 {
@@ -46,7 +56,7 @@ namespace NurseCallMonitor.Models
         {
             try
             {
-                  
+                CreateIfNotExist(floorFilePath);
                 TextReader textReader;
                 using (textReader = new StreamReader($"{floorFilePath}/{floorName}.json", System.Text.Encoding.Default))
                 {

@@ -50,11 +50,9 @@ var snapWhileResizing = true;
             dataType: 'json',
             success: function (data) {
                 alert("Successfully Save.");
-                debugger
                 if (window.location.href.indexOf(`floorName=`) > -1)
                  {
                     window.location.href = window.location.href
-
                 }
                 else
                 {
@@ -100,9 +98,9 @@ $(function () {
     }
       /****/
 
-    $('#btnFullScreen').click(function (e) {
-        $('div.full-size').toggleClass('full-screen');
-    });
+    //$('#btnFullScreen').click(function (e) {
+    //    $('div.full-size').toggleClass('full-screen');
+    //});
    
     //$(".floor-object").resizable({
     //    //handles: 'e, w'
@@ -195,6 +193,41 @@ $(function () {
     
 
 });
+
+$('#toggle_fullscreen').on('click', function () {
+    // if already full screen; exit
+    // else go fullscreen
+    if (
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement
+    ) {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+    } else {
+        element = $('#containment-wrapper').get(0);
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullscreen) {
+            element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        } else if (element.msRequestFullscreen) {
+            element.msRequestFullscreen();
+        }
+    }
+});
+
+
+
 
 function add_bed_room_toFloor(ele, roomData, bedId, isresizeable = true, isdraggable = true) {
     id = (roomData['RoomLabel'] || "").replace(' ', '_');
@@ -351,55 +384,39 @@ function render_room(obj, isresizeable = false, isdraggable = false) {
     add_bed_room_toFloor(ele, roomData, obj.bed_id, isresizeable, isdraggable)
     }
 function draggable_C(elementId, containerId) {
-    //old_w = $(containerId).width();
-    //old_h = $(containerId).height();
-    ////$(element).draggable({
-    ////    containment: containerId, scroll: true,
-    ////    //snap: '.gridlines',
-    ////    stop: function () {
-    ////        $(this).css("left", parseInt($(this).css("left")) / ($(".square-grid").width() / 100) + "%");
-    ////        $(this).css("top", parseInt($(this).css("top")) / ($(".square-grid").height() / 100) + "%")
-    ////    }
-    ////});
-
+    var w = $(containerId).width();
+    var h = $(containerId).height();
     var dragger = document.getElementById(elementId);
     if (dragger) {
         var draggable = Draggable.create(dragger, {
             type: "left,top",
+            bounds: { minX: 0, minY: 0, maxX: w, maxY: h },
             bounds: containerId,
+            onDrag: function () {
+                p_obj = calcPercent(this.x, this.y)
+                dragger.style.left = p_obj.x;
+                dragger.style.top = p_obj.y;
+                
+            },
             onPress: function () {
                 dragger.style.left = dragger.offsetLeft + "px";
                 dragger.style.top = dragger.offsetTop + "px";
                 this.update(); //force the Draggable to update with the new values.
+
             },
-            onDragEnd: function () {
-                dragger.style.left = (dragger.offsetLeft / dragger.parentNode.offsetWidth) * 100 + "%";
-                dragger.style.top = (dragger.offsetTop / dragger.parentNode.offsetHeight) * 100 + "%";
-            }
         });
     }
-
-    //const position = { x: 0, y: 0 }
-
-    //interact('.floor-object').draggable({
-    //    listeners: {
-    //        start(event) {
-    //            console.log(event.type, event.target)
-    //        },
-    //        move(event) {
-    //            position.x += event.dx
-    //            position.y += event.dy
-    //            event.target.style.transform =
-    //                `translate(${position.x}px, ${position.y}px)`
-    //        },
-    //    }
-    //})
+    function calcPercent(x, y) {
+            Xpercent = Math.round(x / w * 100) +"%";
+            Ypercent = Math.round(y / h * 100)+"%";
+        return { x: Xpercent, y: Ypercent }
+    };
 
    
 }
 
 function resizeable(elementCls) {
-    interact('.floor-object')
+    interact('.text_container,.floor-box')
         .resizable({
             edges: { top: true, left: true, bottom: true, right: true },
             listeners: {

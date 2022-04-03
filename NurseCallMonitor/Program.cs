@@ -14,9 +14,15 @@ namespace NurseCallMonitor
     {
         public static void Main(string[] args)
         {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("hosting.json", true)
+                .Build();
+            //CreateHostBuilder(args).Build().Run();
             var host = new WebHostBuilder()
              .UseKestrel()
              .UseContentRoot(Directory.GetCurrentDirectory())
+             .UseConfiguration(config)
              .UseIISIntegration()
              .UseStartup<Startup>()
              .Build();

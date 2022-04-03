@@ -1,13 +1,15 @@
 ﻿@{
     ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/_LayoutV2.cshtml";
+    string fileName = DateTime.Now.ToShortDateString();
 }
+
 @section RenderPageStyles
 {
     <style>
 
-        .close , .edit  {
-            display:none !important
+        .close, .edit {
+            display: none !important
         }
     </style>
 }
@@ -15,36 +17,33 @@
     <div class="container-fluid p-0 h-100">
         <div class="row h-100">
             <div class="col-xl-12 col-xxl-12 d-flex h-100">
-                <div class="w-100 h-100">
-                    <div class="mr-3 mt-3 mb-3 ml-3  square-grid full-size floor h-100" id="containment-wrapper">
-                        @*<a class="nav-icon js-fullscreen d-none d-lg-block  full-icon" href="#">
-                        <div class="position-relative">
-                            <i class="align-middle" data-feather="maximize"></i>
-                        </div>                        <a id="btnFullScreen" class="">
-                    </a>*@
-                        <a id="btnFullScreen" class="nav-icon js-fullscreen d-none d-lg-block position-relative full-icon" href="#">
-                            <div class="position-relative">
-                                <i class="align-middle main-f-icon" data-feather="maximize"></i>
-                            </div>
-                        </a>
-                    </div>
+                <div class="mr-3 mt-3 mb-3 ml-3  square-grid full-size floor h-100" id="containment-wrapper">
+                    <a class="position-relative" id="toggle_fullscreen">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-maximize align-middle"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-    <div>
-    </div>
 </main>
 @section RenderPageScripts
 {
+    <script src="~/js/chat.js?@Html.Raw(@fileName)"></script>
     <script>
 
         $(function () {
-               @if (ViewData["FloorData"] != null) {
-                <text>
-            floor = @Html.Raw(ViewData["FloorData"]);
-                 </text>
-                 }
+                 @if (ViewData["FloorData"] != null && !string.IsNullOrEmpty(ViewData["FloorData"].ToString()))
+                   {
+                        <text>
+                            floor = @Html.Raw(ViewData["FloorData"]);
+                         </text>
+                }
+                else
+                {
+                        <text>
+            floor = [];
+                         </text>
+                }
              $.each(floor || [], function (index, ele) {
                  func_list = {
                      "text": render_text,
@@ -55,9 +54,9 @@
                  if (func)
                      func(ele);
              })
-       
 
-        var IDLE_TIMEOUT = 10; //seconds
+
+        var IDLE_TIMEOUT = 5; //seconds
         var _idleSecondsCounter = 0;
 
         document.onkeypress = function () {
@@ -71,14 +70,12 @@
         };
 
         window.setInterval(CheckIdleTime, 1000);
-
         function CheckIdleTime() {
             _idleSecondsCounter++;
-            var oPanel = document.getElementById("SecondsUntilExpire");
-            if (oPanel)
-                oPanel.innerHTML = (IDLE_TIMEOUT - _idleSecondsCounter) + "";
+            console.log(_idleSecondsCounter)
+            var oPanel = document.getElementById("toggle_fullscreen");
             if (_idleSecondsCounter >= IDLE_TIMEOUT) {
-                $('.feather').trigger('click')
+                $(oPanel).trigger('click')
 
             }
         }

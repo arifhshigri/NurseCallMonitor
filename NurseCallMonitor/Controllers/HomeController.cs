@@ -2,41 +2,55 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NurseCallMonitor;
+using NurseCallMonitor.Models;
 using SignalRChat.Hubs;
+using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace IntercallMonitor.Controllers
 {
-    //public class HomeController : Controller
-    //{
-    //    private readonly ILogger<HomeController> _logger;
-    //    private readonly IHubContext<ChatHub> _hub;
+    public class HomeController : Controller
+    {
+        public IOptions<AppSettings> _settings { get; }
 
-    //    public HomeController(ILogger<HomeController> logger, IHubContext<ChatHub> hub)
-    //    {
-    //        _hub = hub;
-    //        _logger = logger;
-    //    }
+        public HomeController(IOptions<AppSettings> settings, ILogger<HomeController> logger, IHubContext<ChatHub> hub)
+        {
+            _settings = settings;
+            var intObj = new UDPListener(hub);
+            intObj.StartListener("192.168.1.192", 6345);
+        }
 
-    //    public IActionResult Index()
-    //    {
-    //        var intObj = new  UDPListener(_hub);
-    //        intObj.StartListener("192.168.1.192", 6345);
-    //        return View();
-    //    }
+        public IActionResult Index(string floorName="")
+        {
+            setFloorData(floorName);  
+            return View();
+        }
 
-    //    public IActionResult Privacy()
-    //    {
-    //        return View();
-    //    }
+        private void setFloorData(string floorName,bool selectFirst=true)
+        {
+            var fileNames = FilerHelper.ReadFilenames(_settings.Value.FloorFilePath);
+            ViewData["Floors"] = fileNames;
+            floorName = fileNames.FirstOrDefault(x => x.Trim().ToLower() == floorName.Trim().ToLower());
+            ViewData["FloorName"] = floorName;
+            ViewData["FloorData"] = FilerHelper.ReadFloor(_settings.Value.FloorFilePath, floorName);
+        }
 
-    //    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    //    public IActionResult Error()
-    //    {
+        [ HttpPost]
+        public IActionResult AddFloor(FloorModel floorModel)
+        {
+            var floorModelTemp = floorModel;
+            FilerHelper.Write(_settings.Value.FloorFilePath, floorModel.FloorName.Trim(), floorModel.FloorData);
+            return Ok(Json(floorModel));
+        }
+        [HttpGet]
+        public IActionResult AddFloor(string floorName = "")
+        {
+            setFloorData(floorName,false);
+            return View();
+        }
 
-
-    //        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    //    }
-    //}
+    }
 }

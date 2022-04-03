@@ -24,6 +24,8 @@
             padding: 0px !important;
             display: inline-block;
             z-index: 1000;
+            width: 13%;
+            @*height: 22%;*@
         }
 
         .bed h2, h3, i {
@@ -47,8 +49,8 @@
             font-weight: bolder;
             text-align: center;
             color: white !important;
-            z-index: 1000; 
-
+            z-index: 1000;
+            font-size: 2em
         }
 
         .floor {
@@ -66,6 +68,8 @@
             min-width: 150px;
             float: left;
             z-index: 1000;
+            width: 90%;
+            height: 100%;
         }
 
         #draggable {
@@ -189,8 +193,8 @@
                         @foreach (var floorName in ViewData["Floors"] as IList<string>)
                         {
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="@Url.ActionLink($"Index", "Home",new  { floorName= floorName})">
-                                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">@floorName</span>
+                                <a class="sidebar-link" href="@Url.ActionLink($"Index", "Home",new  { floorName= floorName},"http")">
+                                    <i class="align-middle"></i> <span class="align-middle">@floorName</span>
                                 </a>
                             </li>
                         }
@@ -200,7 +204,7 @@
                 <div class="sidebar-cta">
                     <div class="sidebar-cta-content">
                         <div class="d-grid">
-                            <a href="@Url.ActionLink($"AddFloor", "Home")" class="btn btn-outline-primary">Add Floor</a>
+                            <a href="@Url.ActionLink($"AddFloor", "Home",null,protocol:"http")" class="btn btn-outline-primary">Add Floor</a>
                         </div>
                     </div>
                 </div>
@@ -214,20 +218,13 @@
 
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav navbar-align">
-                        <li class="nav-item">
-                            <a class="nav-icon js-fullscreen d-none d-lg-block" href="#">
-                                <div class="position-relative">
-                                    <i class="align-middle" data-feather="maximize"></i>
-                                </div>
-                            </a>
-                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-icon pe-md-0 dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="fa fa-user fa-1x bg-info" aria-hidden="true"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="@Url.ActionLink($"AddFloor", "Home",new { floorName= ViewData["FloorName"]}, protocol: "https")">
-                                    <i class="align-middle me-1" data-feather=" "></i> Edit Floor
+                                <a class="dropdown-item" href="@Url.ActionLink($"AddFloor", "Home",new { floorName= ViewData["FloorName"]}, protocol: "http")">
+                                    <i class="align-middle me-1"  ></i> Edit Floor
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 @*<span class="dropdown-item" href="@Url.ActionLink($"DeleteFloor", "Home",new { floorName= ViewData["FloorName"]}, protocol: "https")">
@@ -270,7 +267,7 @@
                         @*<h2 style="text-align: center;">
                         Bed 1
                     </h2>*@
-                        <i class="fa fa-solid fa-bed fa-5x" style="text-align: center;"></i>
+                        <i class="fa fa-solid fa-bed fa-8x" style="text-align: center;"></i>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -291,25 +288,6 @@
 
     <script src="~/js/main.js?@Html.Raw(@fileName)"></script>
     <script src="~/js/signalr/dist/browser/signalr.js?@Html.Raw(@fileName)"></script>
-    <script src="~/js/chat.js?@Html.Raw(@fileName)"></script>
-    <script>document.addEventListener("DOMContentLoaded", function (event) {
-            setTimeout(function () {
-                if (localStorage.getItem('popState') !== 'shown') {
-                    window.notyf.open({
-                        type: "success",
-                        message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                        duration: 10000,
-                        ripple: true,
-                        dismissible: false,
-                        position: {
-                            x: "left",
-                            y: "bottom"
-                        }
-                    });
-                    localStorage.setItem('popState', 'shown');
-                }
-            }, 15000);
-        });</script>
     @RenderSection("RenderPageScripts", required: false)
 
 </body>
