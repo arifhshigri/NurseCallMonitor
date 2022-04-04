@@ -69,17 +69,7 @@
             _idleSecondsCounter = 0;
         };
 
-        @*window.setInterval(CheckIdleTime, 1000);
-        function CheckIdleTime() {
-            _idleSecondsCounter++;
-            console.log(_idleSecondsCounter)
-            var oPanel = document.getElementById("toggle_fullscreen");
-            if (_idleSecondsCounter >= IDLE_TIMEOUT) {
-                $(oPanel).trigger('click')
-
-            }
-        }
-        });*@
+        });
 
     </script>
 } 
